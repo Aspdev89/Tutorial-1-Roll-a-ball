@@ -4,14 +4,17 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController: MonoBehaviour
 {
     public float speed = 0;
     public TextMeshProUGUI countText;
+    public TextMeshProUGUI livesText;
     public GameObject winTextObject;
+    //public GameObject loseTextObject;
 
     private Rigidbody rb;
     private int count;
+    private int lives;
     private float movementX;
     private float movementY;
 
@@ -21,8 +24,14 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         count = 0;
 
+        //lives = 3;
+
         SetCountText();
+
+       // SetLivesText();
+
         winTextObject.SetActive(false);
+        //loseTextObject.SetActive(false);
     }
 
     void OnMove(InputValue movementValue)
@@ -35,10 +44,27 @@ public class PlayerController : MonoBehaviour
     void SetCountText()
     {
         countText.text = "Count: " + count.ToString();
-        if(count>= 12)
-        {
+        if(count>= 20)
+          {
             winTextObject.SetActive(true);
-        }
+         }
+      // livesText.text = "Lives: " + lives.ToString();
+        // if(lives<= 0)
+         {
+          // Destroy(this);
+         //winTextObject = "You Lose ";
+        // winTextObject.SetActive(true);
+         }
+    }
+
+   void SetLivesText()
+   {
+        livesText.text = "Lives: " + lives.ToString();
+        if(lives<= 0)
+          {
+            Destroy(this); 
+            //loseTextObject.SetActive(true);
+         }
     }
 
     void FixedUpdate()
@@ -56,5 +82,16 @@ public class PlayerController : MonoBehaviour
 
             SetCountText();
         }
+         else if (other.gameObject.CompareTag("Enemy"))
+                {
+                    other.gameObject.SetActive(false);
+             //       lives = lives - 1;  
+
+               //     SetLivesText();
+                }
+        if (count == 12) 
+                        {
+                          transform.position = new Vector3(32.0f, 0.5f, 8.0f); 
+                        }
     }
 }
